@@ -30,7 +30,7 @@ extern size_t sbBufferCapacity(const struct SbBuffer * const buffer)
     return buffer->length / buffer->stride;
 }
 
-void * sbBufferIndex(const struct SbBuffer * const buffer, size_t index)
+extern void * sbBufferIndex(const struct SbBuffer * const buffer, size_t index)
 {
     if (!sbBufferValid(buffer))
     {
