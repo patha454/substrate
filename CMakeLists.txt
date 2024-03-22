@@ -7,6 +7,7 @@ set(MAJOR_VERSION 0 CACHE STRING "Major version of the build")
 set(MINOR_VERSION 0 CACHE STRING "Minor version of the build")
 set(PATCH_VERSION 0 CACHE STRING "Patch version of the build")
 
+enable_testing()
 
 project(
         ${SUBSTRATE_PROJECT_NAME}
