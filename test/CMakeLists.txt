@@ -10,6 +10,6 @@ FetchContent_Declare(cmocka
 FetchContent_MakeAvailable(cmocka)
 
 
-add_executable(buffer_tests_bin test_buffer.c)
-target_link_libraries(buffer_tests_bin PRIVATE cmocka substrate)
-add_test(NAME buffer_tests COMMAND buffer_tests_bin)
+add_executable(memory_tests_bin memory.c)
+target_link_libraries(memory_tests_bin PRIVATE cmocka substrate)
+add_test(NAME memory_tests COMMAND memory_tests_bin)

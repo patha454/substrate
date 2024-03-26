@@ -18,7 +18,9 @@ project(
 set(CMAKE_C_STANDARD 23)
 
 add_library(substrate STATIC
-        src/buffer.c)
+        src/memory.c
+        include/memory.h
+)
 target_include_directories(substrate PUBLIC include)
 target_compile_options(${SUBSTRATE_PROJECT_NAME} PRIVATE "-Werror" "-pedantic" "-Wall" "-Wextra")
 target_compile_options(${SUBSTRATE_PROJECT_NAME} PRIVATE "-ffreestanding")
