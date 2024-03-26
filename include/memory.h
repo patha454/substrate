@@ -32,7 +32,18 @@ struct SbMemory
     const size_t length;
 };
 
-[[nodiscard]]
+/**
+ * Create a `struct SbMemory` object.
+ *
+ * `sbMemory` does not perform sanity checking.
+ *
+ * \param pointer Memory to encapsulate.
+ * \param length Length, in bytes, of the memory addressed by `pointer`.
+ */
+[[nodiscard("sbMemory has no side effects")]]
+struct SbMemory sbMemory(const void * pointer, size_t length);
+
+[[nodiscard("sbMemoryValid has not side effects")]]
 /**
  * Test if a memory object for correctness.
  *

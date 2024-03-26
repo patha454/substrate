@@ -46,13 +46,23 @@ static void test_sbMemoryValid_valid(void ** state)
     assert_true(sbMemoryValid(&memory));
 }
 
+static void test_sbMemory_configure(void ** state)
+{
+    (void) state;
+    const size_t length = 8;
+    uint8_t buffer[length];
+    struct SbMemory memory = sbMemory(&buffer, length);
+    assert_int_equal(memory.base, (intptr_t) &buffer);
+    assert_int_equal(memory.length, length);
+}
 
 int main(void ) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(test_sbMemoryValid_invalid_null),
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
             cmocka_unit_test(test_sbMemoryValid_valid),
-            cmocka_unit_test(test_sbMemoryValid_invalid_zero_len)
+            cmocka_unit_test(test_sbMemoryValid_invalid_zero_len),
+            cmocka_unit_test(test_sbMemory_configure)
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
 }
