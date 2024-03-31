@@ -22,3 +22,12 @@ extern bool sbMemoryValid(sb_memory_t memory)
     return true;
 }
 
+extern void * sbMemoryOffset(sb_memory_t memory, size_t offset)
+{
+    if (offset >= memory.length)
+    {
+        return NULL;
+    }
+    return (void*) (memory.base + offset);
+}
+

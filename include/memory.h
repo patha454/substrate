@@ -57,5 +57,16 @@ sb_memory_t sbMemory(const void * pointer, size_t length);
  */
 bool sbMemoryValid(sb_memory_t memory);
 
+/**
+ * Get a pointer to an offset in the memory.
+ *
+ * `sbMemoryOffset` generates a pointer to an address in the memory-block. If
+ * the offset is 0, the pointer returned will be the base address.
+ *
+ * \param offset Offset, in bytes, for the pointer into the memory.
+ * \return Address to an offset inside the memory.
+ */
+[[nodiscard("sbMemoryOffset is a pure function")]]
+void * sbMemoryOffset(sb_memory_t memory, size_t offset);
 
 #endif //SUBSTRATE_MEMORY_H
