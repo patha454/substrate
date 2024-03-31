@@ -45,7 +45,7 @@ typedef struct SbMemory sb_memory_t;
 [[nodiscard("Discarding memory handle may cause leaks.")]]
 sb_memory_t sbMemory(const void * pointer, size_t length);
 
-[[nodiscard("sbMemoryValid has no side effects")]]
+[[nodiscard("sbMemoryValid is a pure function")]]
 /**
  * Test if a memory object for correctness.
  *
