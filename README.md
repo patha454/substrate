@@ -30,9 +30,8 @@ Substrate is intended for:
 - Error handling: Most programs need reliable error handling.
 - String processing: Often useful, but complex.
 - Container types: No one wants to re-implement a linked list again.
-- 
 
 ## What does not belong in Substrate
 
 - I/O: I/O is platform-dependent, and belongs in a higher-level library.
-- Memory management: Memory allocation  is platform-dependent. Substrate 
+- Memory management: Memory allocation is platform-dependent. Substrate depends on the user to allocate and free memory.
