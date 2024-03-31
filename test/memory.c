@@ -7,12 +7,6 @@
 #include "cmocka.h"
 #include "memory.h"
 
-static void test_sbMemoryValid_invalid_null(void ** state)
-{
-    (void) state;
-    assert_false(sbMemoryValid(nullptr));
-}
-
 static void test_sbMemoryValid_invalid_nullptr(void ** state)
 {
     (void) state;
@@ -20,7 +14,7 @@ static void test_sbMemoryValid_invalid_nullptr(void ** state)
             .base = (intptr_t) (void*) nullptr,
             1
     };
-    assert_false(sbMemoryValid(&memory));
+    assert_false(sbMemoryValid(memory));
 }
 
 static void test_sbMemoryValid_invalid_zero_len(void ** state)
@@ -31,7 +25,7 @@ static void test_sbMemoryValid_invalid_zero_len(void ** state)
             .base = (intptr_t) & buffer,
             .length = 0
     };
-    assert_false(sbMemoryValid(&memory));
+    assert_false(sbMemoryValid(memory));
 }
 
 static void test_sbMemoryValid_valid(void ** state)
@@ -43,7 +37,7 @@ static void test_sbMemoryValid_valid(void ** state)
             .base = (intptr_t) &buffer,
             .length = length
     };
-    assert_true(sbMemoryValid(&memory));
+    assert_true(sbMemoryValid(memory));
 }
 
 static void test_sbMemory_configure(void ** state)
@@ -58,7 +52,6 @@ static void test_sbMemory_configure(void ** state)
 
 int main(void ) {
     const struct CMUnitTest tests[] = {
-            cmocka_unit_test(test_sbMemoryValid_invalid_null),
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
             cmocka_unit_test(test_sbMemoryValid_valid),
             cmocka_unit_test(test_sbMemoryValid_invalid_zero_len),

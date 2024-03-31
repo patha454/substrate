@@ -32,28 +32,30 @@ struct SbMemory
     const size_t length;
 };
 
+typedef struct SbMemory sb_memory_t;
+
 /**
- * Create a `struct SbMemory` object.
+ * Create a Substrate memory handle.
  *
  * `sbMemory` does not perform sanity checking.
  *
  * \param pointer Memory to encapsulate.
  * \param length Length, in bytes, of the memory addressed by `pointer`.
  */
-[[nodiscard("sbMemory has no side effects")]]
-struct SbMemory sbMemory(const void * pointer, size_t length);
+[[nodiscard("Discarding memory handle may cause leaks.")]]
+sb_memory_t sbMemory(const void * pointer, size_t length);
 
-[[nodiscard("sbMemoryValid has not side effects")]]
+[[nodiscard("sbMemoryValid has no side effects")]]
 /**
  * Test if a memory object for correctness.
  *
- * `sbMemoryValid` checks a memory object is non-null, contains
- * a non-null base address, and non-zero length.
+ * `sbMemoryValid` checks a memory object contains a non-null base address, and
+ * non-zero length.
  *
  * \param memory Memory to check for correctness.
  * \return True if `memory` is non-null and non-zero length.
  */
-bool sbMemoryValid(const struct SbMemory * memory);
+bool sbMemoryValid(sb_memory_t memory);
 
 
 #endif //SUBSTRATE_MEMORY_H
