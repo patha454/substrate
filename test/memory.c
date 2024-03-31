@@ -50,12 +50,76 @@ static void test_sbMemory_configure(void ** state)
     assert_int_equal(memory.length, length);
 }
 
+static void test_sbMemoryOffset_zero(void ** state)
+{
+    (void) state;
+    size_t length = 8;
+    uint8_t buffer[length];
+    struct SbMemory memory = {
+            .base = (intptr_t ) &buffer,
+            .length = length
+    };
+    assert_int_equal(sbMemoryOffset(memory, 0), &buffer);
+}
+
+static void test_sbMemoryOffset_positive(void ** state)
+{
+    (void) state;
+    size_t length = 8;
+    size_t offset = 4;
+    uint8_t buffer[length];
+    struct SbMemory memory = {
+            .base = (intptr_t ) &buffer,
+            .length = length
+    };
+    assert_int_equal(sbMemoryOffset(memory, offset), &buffer[offset]);
+}
+
+static void test_sbMemoryOffset_max(void ** state)
+{
+    (void) state;
+    size_t length = 8;
+    uint8_t buffer[length];
+    struct SbMemory memory = {
+            .base = (intptr_t ) &buffer,
+            .length = length
+    };
+    assert_int_equal(sbMemoryOffset(memory, length - 1), &buffer[length - 1]);
+}
+
+static void test_sbMemoryOffset_out_of_range(void ** state)
+{
+    (void) state;
+    size_t length = 8;
+    uint8_t buffer[length];
+    struct SbMemory memory = {
+            .base = (intptr_t ) &buffer,
+            .length = length
+    };
+    assert_null(sbMemoryOffset(memory, length));
+}
+
+static void test_sbMemoryOffset_invalid(void ** state)
+{
+    (void) state;
+    struct SbMemory memory = {
+            .base = (intptr_t ) (void*) nullptr,
+            .length = 0
+    };
+    assert_null(sbMemoryOffset(memory, 0));
+}
+
 int main(void ) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
             cmocka_unit_test(test_sbMemoryValid_valid),
             cmocka_unit_test(test_sbMemoryValid_invalid_zero_len),
-            cmocka_unit_test(test_sbMemory_configure)
+            cmocka_unit_test(test_sbMemory_configure),
+            cmocka_unit_test(test_sbMemoryOffset_zero),
+            cmocka_unit_test(test_sbMemoryOffset_out_of_range),
+            cmocka_unit_test(test_sbMemoryOffset_invalid),
+            cmocka_unit_test(test_sbMemoryOffset_positive),
+            cmocka_unit_test(test_sbMemoryOffset_max)
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
 }
