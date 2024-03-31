@@ -26,11 +26,11 @@ extern void * sbMemoryOffset(sb_memory_t memory, size_t offset)
 {
     if (!sbMemoryValid(memory))
     {
-        return NULL;
+        return nullptr;
     }
     if (offset >= memory.length)
     {
-        return NULL;
+        return nullptr;
     }
     return (void*) (memory.base + offset);
 }
