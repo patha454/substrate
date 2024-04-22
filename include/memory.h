@@ -24,16 +24,16 @@
 #include <stdint.h>
 
 /**
- * `SbMemory` is s fixed-length block of memory.
+ * `_SbMemory` is s fixed-length block of memory.
  *
  * Substrate does not deal with system memory-management. The user must
  * allocate memory before providing it to Substrate, and free it when
  * Substrate has finished using the memory.
  *
- * A `SbMemory` is a fat-pointer, consisting of an address and length (in
+ * A `_SbMemory` is a fat-pointer, consisting of an address and length (in
  * bytes.)
  */
-struct SbMemory
+struct _SbMemory
 {
     /** Start address of the memory block. */
     const uintptr_t base;
@@ -42,7 +42,7 @@ struct SbMemory
     const size_t length;
 };
 
-typedef struct SbMemory sb_memory_t;
+typedef struct _SbMemory sb_memory_t;
 
 /**
  * Create a Substrate memory handle.
@@ -52,7 +52,7 @@ typedef struct SbMemory sb_memory_t;
  * \param pointer Memory to encapsulate.
  * \param length Length, in bytes, of the memory addressed by `pointer`.
  */
-[[nodiscard("Discarding memory handle may cause leaks.")]]
+[[nodiscard("sbMemory is a pure function")], uns]
 sb_memory_t sbMemory(const void * pointer, size_t length);
 
 [[nodiscard("sbMemoryValid is a pure function")]]
@@ -79,4 +79,4 @@ bool sbMemoryValid(sb_memory_t memory);
 [[nodiscard("sbMemoryOffset is a pure function")]]
 void * sbMemoryOffset(sb_memory_t memory, size_t offset);
 
-#endif //SUBSTRATE_MEMORY_H
+#endif

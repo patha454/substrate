@@ -2,7 +2,7 @@
 
 extern sb_memory_t sbMemory(const void * pointer, size_t length)
 {
-    struct SbMemory memory = {
+    struct _SbMemory memory = {
             .base = (intptr_t) pointer,
             .length = length
     };
