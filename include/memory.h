@@ -1,7 +1,17 @@
 /**
  * \file memory.h
  *
- * Manage fixed-size blocks of memory.
+ * `memory.h` declares Substrate's basic memory manipulation.
+ *
+ * Memory manipulation is provided through `sb_memory_t` - a fat pointer, and
+ * functions to edit, copy, and compare memory using `sb_memory_t`.
+ *
+ * Substrate is not concerned with memory allocation and management. Memory
+ * management is platform-sensitive, and depends on design choice (static vs
+ * dynamic allocation.) Substrate lets the user allocate memory as they see
+ * fit, before passing blocks of memory to Substrate. The user will also need
+ * to deallocate their memory (if relevant) when they've finished using it in
+ * Substrate.
  *
  * \author H Paterson.
  * \copyright Boost Software License 1.0.
