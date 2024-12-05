@@ -1,11 +1,12 @@
-
-
 #include "memory.h"
-#include "cmocka.h"
-#include <setjmp.h>
+
+// clang-format off
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <setjmp.h>
+#include <cmocka.h>
+// clang-format on
 
 static void test_sbMemoryValid_invalid_nullptr(void** state)
 {
@@ -82,7 +83,6 @@ static void test_sbMemoryOffset_out_of_range(void** state)
         = { .base = (intptr_t)&buffer, .length = length };
     assert_null(sbMemoryOffset(memory, length));
 }
-
 static void test_sbMemoryOffset_invalid(void** state)
 {
     (void)state;
