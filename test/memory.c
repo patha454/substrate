@@ -7,8 +7,6 @@
 #include "cmocka.h"
 #include "memory.h"
 
-#include "../../../AppData/Local/Programs/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/iso646.h"
-
 static void test_sbMemoryValid_invalid_nullptr(void ** state)
 {
     (void) state;
