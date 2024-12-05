@@ -247,6 +247,25 @@ static void test_sbMemoryCopy_words_backward_overlap(void ** state)
     assert_memory_equal(&buffer, ((uint64_t[]){3, 4, 5, 6, 5, 6, 7, 8}), 8 * sizeof(buffer[0]));
 }
 
+static void test_sbMemoryCopy_idempotent(void ** state)
+{
+    (void) state;
+    const uint64_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t memory = sbMemory(&buffer, 8 * sizeof(buffer[0]));
+    assert_true(sbMemoryCopy(memory, memory));
+    assert_memory_equal(&buffer, ((uint64_t[]){1, 2, 3, 4, 5, 6, 7, 8}), 8 * sizeof(buffer[0]));
+}
+
+static void test_sbMemoryCopy_idempotent_different_len(void ** state)
+{
+    (void) state;
+    const uint64_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t origin_mem = sbMemory(&buffer, 8 * sizeof(buffer[0]));
+    const sb_memory_t destination_mem = sbMemory(&buffer, 8 * sizeof(buffer[0]));
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&buffer, ((uint64_t[]){1, 2, 3, 4, 5, 6, 7, 8}), 8 * sizeof(buffer[0]));
+}
+
 int main(void ) {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
@@ -269,7 +288,9 @@ int main(void ) {
         cmocka_unit_test(test_sbMemoryCopy_words_no_overlap_single_word),
         cmocka_unit_test(test_sbMemoryCopy_words_no_overlap_eight_words),
         cmocka_unit_test(test_sbMemoryCopy_words_forward_overlap),
-        cmocka_unit_test(test_sbMemoryCopy_words_backward_overlap)
+        cmocka_unit_test(test_sbMemoryCopy_words_backward_overlap),
+        cmocka_unit_test(test_sbMemoryCopy_idempotent),
+        cmocka_unit_test(test_sbMemoryCopy_idempotent_different_len)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
