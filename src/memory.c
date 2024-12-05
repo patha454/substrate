@@ -35,3 +35,10 @@ extern void * sbMemoryOffset(sb_memory_t memory, size_t offset)
     return (void*) (memory.base + offset);
 }
 
+extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
+{
+    (void) origin;
+    (void) destination;
+    return false;
+}
+

@@ -79,4 +79,18 @@ bool sbMemoryValid(sb_memory_t memory);
 [[nodiscard("sbMemoryOffset is a pure function")]]
 void * sbMemoryOffset(sb_memory_t memory, size_t offset);
 
+/**
+ * Copy memory from the origin to the destination.
+ *
+ * `sbMemoryCopy` will either successfully copy all memory, and return true,
+ * or copy no memory and return false, if the operation is not possible.
+ *
+ * If the origin is longer than the destination, `sbMemoryCopy` will return
+ * false and no memory will be copied.
+ *
+ * @param origin Memory to be copied.
+ * @param destination Destination where the origin should be copied.
+ */
+bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination);
+
 #endif
