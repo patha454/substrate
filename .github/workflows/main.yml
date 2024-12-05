@@ -1,0 +1,17 @@
+name: Style with Clang-Format
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Clang Format Github Action
+      uses: RafikFarhad/clang-format-github-action@v4
+      with:
+        style: file
+        sources: "src/**/*.h,src/**/*.c,test/**/*.c,include/**/*.h"
+      
