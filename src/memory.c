@@ -46,16 +46,15 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
         return false;
     }
     bool reverse = destination.base > origin.base && destination.base < origin.base + origin.length;
-
-    uint8_t * source = (uint8_t*) (reverse ? origin.base + origin.length - 1 : origin.base);
-    uint8_t * target = (uint8_t*) (reverse ? destination.base + origin.length -1 : destination.base);
-    int_fast8_t sense = reverse ? -1 : 1;
+    const auto source = (uint8_t*) (reverse ? origin.base + origin.length - 1 : origin.base);
+    const auto target = (uint8_t*) (reverse ? destination.base + origin.length -1 : destination.base);
+    const int_fast8_t sense = reverse ? -1 : 1;
     size_t i = 0;
     if (reverse)
     {
         while (i < origin.length)
         {
-            *(target - i) = *(source + sense * i);
+            *(target + sense * i) = *(source + sense * i);
             i++;
         }
     }
@@ -63,7 +62,7 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
     {
         while (i < origin.length)
         {
-            *(target + i) = *(source + sense * i);
+            *(target + sense * i) = *(source + sense * i);
             i++;
         }
     }
