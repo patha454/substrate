@@ -37,8 +37,20 @@ extern void * sbMemoryOffset(sb_memory_t memory, size_t offset)
 
 extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
 {
-    (void) origin;
-    (void) destination;
-    return false;
+    if (!sbMemoryValid(origin) || !sbMemoryValid(destination))
+    {
+        return false;
+    }
+    if (origin.length > destination.length)
+    {
+        return false;
+    }
+    size_t i = 0;
+    while (i < origin.length)
+    {
+        *(uint8_t*) (destination.base + i) = *(uint8_t*) (origin.base + i);
+        i++;
+    }
+    return true;
 }
 

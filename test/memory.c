@@ -31,7 +31,7 @@ static void test_sbMemoryValid_invalid_zero_len(void ** state)
 static void test_sbMemoryValid_valid(void ** state)
 {
     (void) state;
-    constexpr size_t length = 8;
+    const size_t length = 8;
     uint8_t buffer[length];
     const struct _SbMemory memory = {
             .base = (intptr_t) &buffer,
@@ -43,7 +43,7 @@ static void test_sbMemoryValid_valid(void ** state)
 static void test_sbMemory_configure(void ** state)
 {
     (void) state;
-    constexpr size_t length = 8;
+    const size_t length = 8;
     uint8_t buffer[length];
     const struct _SbMemory memory = sbMemory(&buffer, length);
     assert_int_equal(memory.base, (intptr_t) &buffer);
@@ -53,7 +53,7 @@ static void test_sbMemory_configure(void ** state)
 static void test_sbMemoryOffset_zero(void ** state)
 {
     (void) state;
-    constexpr size_t length = 8;
+    const size_t length = 8;
     uint8_t buffer[length];
     const struct _SbMemory memory = {
             .base = (intptr_t ) &buffer,
@@ -65,7 +65,7 @@ static void test_sbMemoryOffset_zero(void ** state)
 static void test_sbMemoryOffset_positive(void ** state)
 {
     (void) state;
-    constexpr size_t length = 8;
+    const size_t length = 8;
     size_t offset = 4;
     uint8_t buffer[length];
     const struct _SbMemory memory = {
@@ -78,7 +78,7 @@ static void test_sbMemoryOffset_positive(void ** state)
 static void test_sbMemoryOffset_max(void ** state)
 {
     (void) state;
-    constexpr size_t length = 8;
+    const size_t length = 8;
     uint8_t buffer[length];
     const struct _SbMemory memory = {
             .base = (intptr_t ) &buffer,
@@ -109,6 +109,54 @@ static void test_sbMemoryOffset_invalid(void ** state)
     assert_null(sbMemoryOffset(memory, 0));
 }
 
+static void test_sbMemoryCopy_zero_len_origin(void ** state)
+{
+    (void) state;
+    size_t length = 1;
+    const uint8_t origin[]= {1};
+    const uint8_t destination[] = {5};
+    const sb_memory_t origin_mem = sbMemory(&origin, 0);
+    const sb_memory_t destination_mem = sbMemory(&destination, length);
+    assert_false(sbMemoryCopy(origin_mem, destination_mem));
+    assert_int_equal(destination[0], 5);
+}
+
+static void test_sbMemoryCopy_zero_len_destination(void ** state)
+{
+    (void) state;
+    size_t length = 1;
+    const uint8_t origin[]= {1};
+    const uint8_t destination[] = {5};
+    const sb_memory_t origin_mem = sbMemory(&origin, length);
+    const sb_memory_t destination_mem = sbMemory(&destination, 0);
+    assert_false(sbMemoryCopy(origin_mem, destination_mem));
+    assert_int_equal(destination[0], 5);
+}
+
+static void test_sbMemoryCopy_no_overlap_single_byte(void ** state)
+{
+    (void) state;
+    size_t length = 1;
+    const uint8_t origin[]= {1};
+    const uint8_t destination[] = {0};
+    const sb_memory_t origin_mem = sbMemory(&origin, length);
+    const sb_memory_t destination_mem = sbMemory(&destination, length);
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&origin, &destination, length);
+}
+
+static void test_sbMemoryCopy_no_overlap_eight_byte(void ** state)
+{
+    (void) state;
+    size_t length = 8;
+    const uint8_t origin[]= {8, 7, 6, 5, 4, 3, 2, 1};
+    const uint8_t destination[] = {0, 0, 0, 0, 0, 0, 0, 0};
+    const sb_memory_t origin_mem = sbMemory(&origin, length);
+    const sb_memory_t destination_mem = sbMemory(&destination, length);
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&origin, &destination, length);
+}
+
 int main(void ) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
@@ -119,7 +167,11 @@ int main(void ) {
             cmocka_unit_test(test_sbMemoryOffset_out_of_range),
             cmocka_unit_test(test_sbMemoryOffset_invalid),
             cmocka_unit_test(test_sbMemoryOffset_positive),
-            cmocka_unit_test(test_sbMemoryOffset_max)
+            cmocka_unit_test(test_sbMemoryOffset_max),
+            cmocka_unit_test(test_sbMemoryCopy_zero_len_origin),
+            cmocka_unit_test(test_sbMemoryCopy_zero_len_destination),
+            cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),
+            cmocka_unit_test(test_sbMemoryCopy_no_overlap_eight_byte)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
