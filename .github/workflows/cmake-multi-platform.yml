@@ -52,10 +52,10 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
     - name: Install Compilers
       run: >
-        sudo apt update && sudo apt install gcc-14 && sudo apt-get install build-essential
+        sudo apt update && sudo apt install gcc-13 && sudo apt-get install build-essential
     - name: Set Default Compilers
       run: >
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 --slave /usr/bin/gcc-ar gcc-ar /usr/bin/gcc-ar-14 --slave /usr/bin/gcc-ranlib gcc-ranlib /usr/bin/gcc-ranlib-14 --slave /usr/bin/gcov gcov /usr/bin/gcov-14
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/gcc-ar gcc-ar /usr/bin/gcc-ar-13 --slave /usr/bin/gcc-ranlib gcc-ranlib /usr/bin/gcc-ranlib-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
     - name: Check Compiler Versions
       run: >
         gcc -v && clang -v
