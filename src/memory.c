@@ -1,82 +1,72 @@
 #include "memory.h"
 
-extern sb_memory_t sbMemory(const void * pointer, size_t length)
+extern sb_memory_t sbMemory(const void* pointer, size_t length)
 {
-    struct _SbMemory memory = {
-            .base = (intptr_t) pointer,
-            .length = length
-    };
+    struct _SbMemory memory = { .base = (intptr_t)pointer, .length = length };
     return memory;
 }
 
 extern bool sbMemoryValid(sb_memory_t memory)
 {
-    if ((void *) memory.base == nullptr)
-    {
+    if ((void*)memory.base == nullptr) {
         return false;
     }
-    if (memory.length == 0)
-    {
+    if (memory.length == 0) {
         return false;
     }
     return true;
 }
 
-extern void * sbMemoryOffset(sb_memory_t memory, size_t offset)
+extern void* sbMemoryOffset(sb_memory_t memory, size_t offset)
 {
-    if (!sbMemoryValid(memory))
-    {
+    if (!sbMemoryValid(memory)) {
         return nullptr;
     }
-    if (offset >= memory.length)
-    {
+    if (offset >= memory.length) {
         return nullptr;
     }
-    return (void*) (memory.base + offset);
+    return (void*)(memory.base + offset);
 }
 
 extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
 {
-    if (!sbMemoryValid(origin) || !sbMemoryValid(destination))
-    {
+    if (!sbMemoryValid(origin) || !sbMemoryValid(destination)) {
         return false;
     }
-    if (origin.length > destination.length)
-    {
+    if (origin.length > destination.length) {
         return false;
     }
-    bool reverse = destination.base > origin.base && destination.base < origin.base + origin.length;
-    auto source = (intptr_t) (reverse ? origin.base + origin.length - 1 : origin.base);
-    auto target = (intptr_t) (reverse ? destination.base + origin.length -1 : destination.base);
+    bool reverse = destination.base > origin.base
+        && destination.base < origin.base + origin.length;
+    auto source
+        = (intptr_t)(reverse ? origin.base + origin.length - 1 : origin.base);
+    auto target = (intptr_t)(reverse ? destination.base + origin.length - 1
+                                     : destination.base);
     const int_fast8_t sense = reverse ? -1 : 1;
     size_t i = 0;
 
     // Crawl to word alignment...
-    while (i < origin.length && (uintptr_t) source % sizeof(uintmax_t) != 0)
-    {
-        *(uint8_t*) target = *(uint8_t*) source;
+    while (i < origin.length && (uintptr_t)source % sizeof(uintmax_t) != 0) {
+        *(uint8_t*)target = *(uint8_t*)source;
         target += sense;
         source += sense;
         i += 1;
     }
 
     // Copy words for speed...
-    while (i < origin.length && i + sizeof(uintmax_t) <= origin.length)
-    {
-        *(uintmax_t*) target = *(uintmax_t*) source;
-        target += sense * (uint_fast8_t) sizeof(uintmax_t);
-        source += sense * (uint_fast8_t) sizeof(uintmax_t);
+    while (i < origin.length && i + sizeof(uintmax_t) <= origin.length) {
+        *(uintmax_t*)target = *(uintmax_t*)source;
+        target += sense * (uint_fast8_t)sizeof(uintmax_t);
+        source += sense * (uint_fast8_t)sizeof(uintmax_t);
         i += sizeof(uintmax_t);
     }
 
     // Crawl to end of copy...
-    while (i < origin.length)
-    {
-        *(uint8_t*) target = *(uint8_t*) source;
+    while (i < origin.length) {
+        *(uint8_t*)target = *(uint8_t*)source;
         target += sense;
         source += sense;
         i += 1;
     }
     return true;
 }
-

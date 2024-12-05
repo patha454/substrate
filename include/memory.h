@@ -33,8 +33,7 @@
  * A `_SbMemory` is a fat-pointer, consisting of an address and length (in
  * bytes.)
  */
-struct _SbMemory
-{
+struct _SbMemory {
     /** Start address of the memory block. */
     const uintptr_t base;
 
@@ -53,7 +52,7 @@ typedef struct _SbMemory sb_memory_t;
  * \param length Length, in bytes, of the memory addressed by `pointer`.
  */
 [[nodiscard("sbMemory is a pure function")]]
-sb_memory_t sbMemory(const void * pointer, size_t length);
+sb_memory_t sbMemory(const void* pointer, size_t length);
 
 [[nodiscard("sbMemoryValid is a pure function")]]
 /**
@@ -77,7 +76,7 @@ bool sbMemoryValid(sb_memory_t memory);
  * \return Address to an offset inside the memory.
  */
 [[nodiscard("sbMemoryOffset is a pure function")]]
-void * sbMemoryOffset(sb_memory_t memory, size_t offset);
+void* sbMemoryOffset(sb_memory_t memory, size_t offset);
 
 /**
  * Copy memory from the origin to the destination.
