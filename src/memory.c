@@ -50,21 +50,10 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
     const auto target = (uint8_t*) (reverse ? destination.base + origin.length -1 : destination.base);
     const int_fast8_t sense = reverse ? -1 : 1;
     size_t i = 0;
-    if (reverse)
+    while (i < origin.length)
     {
-        while (i < origin.length)
-        {
-            *(target + sense * i) = *(source + sense * i);
-            i++;
-        }
-    }
-    else
-    {
-        while (i < origin.length)
-        {
-            *(target + sense * i) = *(source + sense * i);
-            i++;
-        }
+        *(target + sense * i) = *(source + sense * i);
+        i++;
     }
     return true;
 }
