@@ -7,6 +7,8 @@
 #include "cmocka.h"
 #include "memory.h"
 
+#include "../../../AppData/Local/Programs/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/iso646.h"
+
 static void test_sbMemoryValid_invalid_nullptr(void ** state)
 {
     (void) state;
@@ -177,6 +179,74 @@ static void test_sbMemoryCopy_backward_overlap(void ** state)
     assert_memory_equal(&buffer, ((uint8_t[]){3, 4, 5, 6, 5, 6, 7, 8}), 8);
 }
 
+
+
+
+
+static void test_sbMemoryCopy_words_zero_len_origin(void ** state)
+{
+    (void) state;
+    const uint64_t origin[]= {1};
+    const uint64_t destination[] = {5};
+    const sb_memory_t origin_mem = sbMemory(&origin, 0);
+    const sb_memory_t destination_mem = sbMemory(&destination, 1);
+    assert_false(sbMemoryCopy(origin_mem, destination_mem));
+    assert_int_equal(destination[0], 5);
+}
+
+static void test_sbMemoryCopy_words_zero_len_destination(void ** state)
+{
+    (void) state;
+    const uint64_t origin[]= {1};
+    const uint64_t destination[] = {5};
+    const sb_memory_t origin_mem = sbMemory(&origin, 1);
+    const sb_memory_t destination_mem = sbMemory(&destination, 0);
+    assert_false(sbMemoryCopy(origin_mem, destination_mem));
+    assert_int_equal(destination[0], 5);
+}
+
+static void test_sbMemoryCopy_words_no_overlap_single_word(void ** state)
+{
+    (void) state;
+    const uint64_t origin[]= {1};
+    const uint64_t destination[] = {0};
+    const sb_memory_t origin_mem = sbMemory(&origin, sizeof(origin));
+    const sb_memory_t destination_mem = sbMemory(&destination, sizeof(destination));
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&origin, &destination, sizeof(origin));
+}
+
+static void test_sbMemoryCopy_words_no_overlap_eight_words(void ** state)
+{
+    (void) state;
+    const uint64_t origin[]= {8, 7, 6, 5, 4, 3, 2, 1};
+    const uint64_t destination[] = {0, 0, 0, 0, 0, 0, 0, 0};
+    const sb_memory_t origin_mem = sbMemory(&origin, sizeof(origin));
+    const sb_memory_t destination_mem = sbMemory(&destination, sizeof(destination));
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&origin, &destination, sizeof(origin));
+}
+
+static void test_sbMemoryCopy_words_forward_overlap(void ** state)
+{
+    (void) state;
+    const uint64_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t origin_mem = sbMemory(&buffer, 4 * sizeof(buffer[0]));
+    const sb_memory_t destination_mem = sbMemory(&buffer[2], 4 * sizeof(buffer[0]));
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&buffer, ((uint64_t[]){1, 2, 1, 2, 3, 4, 7, 8}), 8 * sizeof(buffer[0]));
+}
+
+static void test_sbMemoryCopy_words_backward_overlap(void ** state)
+{
+    (void) state;
+    const uint64_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t origin_mem = sbMemory(&buffer[2], 4 * sizeof(buffer[0]));
+    const sb_memory_t destination_mem = sbMemory(&buffer, 4 * sizeof(buffer[0]));
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&buffer, ((uint64_t[]){3, 4, 5, 6, 5, 6, 7, 8}), 8 * sizeof(buffer[0]));
+}
+
 int main(void ) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
@@ -193,7 +263,13 @@ int main(void ) {
             cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),
             cmocka_unit_test(test_sbMemoryCopy_no_overlap_eight_byte),
             cmocka_unit_test(test_sbMemoryCopy_forward_overlap),
-            cmocka_unit_test(test_sbMemoryCopy_backward_overlap)
+            cmocka_unit_test(test_sbMemoryCopy_backward_overlap),
+            cmocka_unit_test(test_sbMemoryCopy_words_zero_len_origin),
+            cmocka_unit_test(test_sbMemoryCopy_words_zero_len_destination),
+        cmocka_unit_test(test_sbMemoryCopy_words_no_overlap_single_word),
+        cmocka_unit_test(test_sbMemoryCopy_words_no_overlap_eight_words),
+        cmocka_unit_test(test_sbMemoryCopy_words_forward_overlap),
+        cmocka_unit_test(test_sbMemoryCopy_words_backward_overlap)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
