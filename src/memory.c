@@ -62,7 +62,6 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
         i += 1;
     }
 
-
     // Copy words for speed...
     while (i < origin.length && i + sizeof(uintmax_t) <= origin.length)
     {
