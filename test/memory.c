@@ -179,10 +179,6 @@ static void test_sbMemoryCopy_backward_overlap(void ** state)
     assert_memory_equal(&buffer, ((uint8_t[]){3, 4, 5, 6, 5, 6, 7, 8}), 8);
 }
 
-
-
-
-
 static void test_sbMemoryCopy_words_zero_len_origin(void ** state)
 {
     (void) state;
