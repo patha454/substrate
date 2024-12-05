@@ -1,7 +1,5 @@
 #include "memory.h"
 
-#include <sys/types.h>
-
 extern sb_memory_t sbMemory(const void * pointer, size_t length)
 {
     struct _SbMemory memory = {
@@ -13,7 +11,7 @@ extern sb_memory_t sbMemory(const void * pointer, size_t length)
 
 extern bool sbMemoryValid(sb_memory_t memory)
 {
-    if (((void *) memory.base) == nullptr)
+    if ((void *) memory.base == nullptr)
     {
         return false;
     }
