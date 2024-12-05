@@ -52,7 +52,7 @@ typedef struct _SbMemory sb_memory_t;
  * \param pointer Memory to encapsulate.
  * \param length Length, in bytes, of the memory addressed by `pointer`.
  */
-[[nodiscard("sbMemory is a pure function")], uns]
+[[nodiscard("sbMemory is a pure function")]]
 sb_memory_t sbMemory(const void * pointer, size_t length);
 
 [[nodiscard("sbMemoryValid is a pure function")]]
