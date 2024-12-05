@@ -8,7 +8,7 @@ Substrate aims to provide a freestanding, modern, systems utility library.
 
 - _Modern_ means C23 compliant and idiomatic.
 
-  Substrates forward-looking, intended for new projects, and has no interest in supporting legacy code or tools.
+  Substrate is forward-looking, intended for new projects, and has no interest in supporting legacy code or tools.
 
 - _Systems utility library_ means Substrate types and functions useful for writing other programs and libraries.
 
@@ -18,7 +18,7 @@ Substrate is intended for:
 
 - Programs with are statically linked or unable to dynamically link to other libraries:
   
-  Operating systems kernels and dynamic linkers are specific targets.
+  Operating systems kernels, dynamic linkers, and bare-metal software are specific targets.
 
 - Programs which require a limited, auditable set of dependencies.
 
