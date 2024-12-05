@@ -45,11 +45,27 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
     {
         return false;
     }
+    bool reverse = destination.base > origin.base && destination.base < origin.base + origin.length;
+
+    uint8_t * source = (uint8_t*) (reverse ? origin.base + origin.length - 1 : origin.base);
+    uint8_t * target = (uint8_t*) (reverse ? destination.base + origin.length -1 : destination.base);
+    int_fast8_t sense = reverse ? -1 : 1;
     size_t i = 0;
-    while (i < origin.length)
+    if (reverse)
     {
-        *(uint8_t*) (destination.base + i) = *(uint8_t*) (origin.base + i);
-        i++;
+        while (i < origin.length)
+        {
+            *(target - i) = *(source + sense * i);
+            i++;
+        }
+    }
+    else
+    {
+        while (i < origin.length)
+        {
+            *(target + i) = *(source + sense * i);
+            i++;
+        }
     }
     return true;
 }

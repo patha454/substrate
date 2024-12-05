@@ -157,6 +157,16 @@ static void test_sbMemoryCopy_no_overlap_eight_byte(void ** state)
     assert_memory_equal(&origin, &destination, length);
 }
 
+static void test_sbMemoryCopy_forward_overlap(void ** state)
+{
+    (void) state;
+    const uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t origin_mem = sbMemory(&buffer, 4);
+    const sb_memory_t destination_mem = sbMemory(&buffer[2], 4);
+    assert_true(sbMemoryCopy(origin_mem, destination_mem));
+    assert_memory_equal(&buffer, ((uint8_t[]){1, 2, 1, 2, 3, 4, 7, 8}), 8);
+}
+
 int main(void ) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(test_sbMemoryValid_invalid_nullptr),
@@ -171,7 +181,8 @@ int main(void ) {
             cmocka_unit_test(test_sbMemoryCopy_zero_len_origin),
             cmocka_unit_test(test_sbMemoryCopy_zero_len_destination),
             cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),
-            cmocka_unit_test(test_sbMemoryCopy_no_overlap_eight_byte)
+            cmocka_unit_test(test_sbMemoryCopy_no_overlap_eight_byte),
+            cmocka_unit_test(test_sbMemoryCopy_forward_overlap)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
