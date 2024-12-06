@@ -54,7 +54,6 @@ typedef struct _SbMemory sb_memory_t;
 [[nodiscard("sbMemory is a pure function")]]
 sb_memory_t sbMemory(const void* pointer, size_t length);
 
-[[nodiscard("sbMemoryValid is a pure function")]]
 /**
  * Test if a memory object for correctness.
  *
@@ -64,6 +63,7 @@ sb_memory_t sbMemory(const void* pointer, size_t length);
  * \param memory Memory to check for correctness.
  * \return True if `memory` is non-null and non-zero length.
  */
+[[nodiscard("sbMemoryValid is a pure function")]]
 bool sbMemoryValid(sb_memory_t memory);
 
 /**
