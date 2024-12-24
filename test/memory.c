@@ -83,6 +83,7 @@ static void test_sbMemoryOffset_out_of_range(void** state)
         = { .base = (intptr_t)&buffer, .length = length };
     assert_null(sbMemoryOffset(memory, length));
 }
+
 static void test_sbMemoryOffset_invalid(void** state)
 {
     (void)state;
