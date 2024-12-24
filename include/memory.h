@@ -72,6 +72,7 @@ bool sbMemoryValid(sb_memory_t memory);
  * `sbMemoryOffset` generates a pointer to an address in the memory-block. If
  * the offset is 0, the pointer returned will be the base address.
  *
+ *\param memory Get a pointer into this memory.
  * \param offset Offset, in bytes, for the pointer into the memory.
  * \return Address to an offset inside the memory.
  */
