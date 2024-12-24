@@ -79,6 +79,21 @@ bool sbMemoryValid(sb_memory_t memory);
 void* sbMemoryOffset(sb_memory_t memory, size_t offset);
 
 /**
+ * Test if block of memory overlaps with the lower addresses of another.
+ *
+ * `sbMemoryOverlapLow` tests if a query block of memory overlaps with
+ * at least the lower addresses in a reference block of memory.
+ *
+ * The function will return false if at least one block of memory is invalid,
+ * such as zero length or null.
+ *
+ * \param reference Check if memory overlaps with the low end of this memory.
+ * \param query Test if this memory overlaps with the reference memory.
+ * \return True if the query overlaps with the low end of the reference.
+ */
+ extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query);
+
+/**
  * Copy memory from the origin to the destination.
  *
  * `sbMemoryCopy` will either successfully copy all memory, and return true,

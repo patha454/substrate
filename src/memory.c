@@ -28,6 +28,14 @@ extern void* sbMemoryOffset(sb_memory_t memory, size_t offset)
     return (void*)(memory.base + offset);
 }
 
+extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query)
+{
+    if (!sbMemoryValid(reference) || !sbMemoryValid(query)) {
+        return false;
+    }
+    return false;
+}
+
 extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
 {
     if (!sbMemoryValid(origin) || !sbMemoryValid(destination)) {

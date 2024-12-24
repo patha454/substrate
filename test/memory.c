@@ -92,6 +92,36 @@ static void test_sbMemoryOffset_invalid(void** state)
     assert_null(sbMemoryOffset(memory, 0));
 }
 
+static void test_sbMemoryOverlapLow_invalid_reference(void** state)
+{
+    (void)state;
+    const struct _SbMemory reference
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const uint8_t query_bytes = { 0 };
+    const struct _SbMemory query = sbMemory(&query_bytes, sizeof(query_bytes));
+    assert_false(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_invalid_query(void** state)
+{
+    (void)state;
+    const struct _SbMemory query
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const uint8_t reference_bytes = { 0 };
+    const struct _SbMemory reference = sbMemory(&reference_bytes, sizeof(reference_bytes));
+    assert_false(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_invalid_reference_and_query(void** state)
+{
+    (void)state;
+    const struct _SbMemory query
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const struct _SbMemory reference
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    assert_false(sbMemoryOverlapLow(reference, query));
+}
+
 static void test_sbMemoryCopy_zero_len_origin(void** state)
 {
     (void)state;
@@ -264,6 +294,9 @@ int main(void)
               cmocka_unit_test(test_sbMemoryOffset_invalid),
               cmocka_unit_test(test_sbMemoryOffset_positive),
               cmocka_unit_test(test_sbMemoryOffset_max),
+              cmocka_unit_test(test_sbMemoryOverlapLow_invalid_reference),
+              cmocka_unit_test(test_sbMemoryOverlapLow_invalid_reference_and_query),
+              cmocka_unit_test(test_sbMemoryOverlapLow_invalid_query),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_origin),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_destination),
               cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),
