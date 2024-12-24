@@ -92,6 +92,7 @@ void* sbMemoryOffset(sb_memory_t memory, size_t offset);
  * \param query Test if this memory overlaps with the reference memory.
  * \return True if the query overlaps with the low end of the reference.
  */
+[[nodiscard("sbMemoryOverlapLow is a pure function")]]
  extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query);
 
 /**
