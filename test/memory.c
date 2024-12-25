@@ -167,6 +167,81 @@ static void test_sbMemoryOverlapLow_super_overlap(void** state)
     assert_true(sbMemoryOverlapLow(reference, query));
 }
 
+static void test_sbMemoryOverlapHigh_invalid_reference(void** state)
+{
+    (void)state;
+    const struct _SbMemory reference
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const uint8_t query_bytes = { 0 };
+    const struct _SbMemory query = sbMemory(&query_bytes, sizeof(query_bytes));
+    assert_false(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_invalid_query(void** state)
+{
+    (void)state;
+    const struct _SbMemory query
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const uint8_t reference_bytes = { 0 };
+    const struct _SbMemory reference = sbMemory(&reference_bytes, sizeof(reference_bytes));
+    assert_false(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_invalid_reference_and_query(void** state)
+{
+    (void)state;
+    const struct _SbMemory query
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    const struct _SbMemory reference
+        = { .base = (intptr_t)(void*)nullptr, .length = 0 };
+    assert_false(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_simple(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes[2], 4);
+    assert_true(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_equal(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 4);
+    assert_true(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_equal_base(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 6);
+    assert_true(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_equal_end(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes[2], 4);
+    const sb_memory_t query = sbMemory(&bytes, 6);
+    assert_true(sbMemoryOverlapHigh(reference, query));
+}
+
+static void test_sbMemoryOverlapHigh_super_overlap(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes[2], 2);
+    const sb_memory_t query = sbMemory(&bytes, 8);
+    assert_true(sbMemoryOverlapHigh(reference, query));
+}
+
 static void test_sbMemoryCopy_zero_len_origin(void** state)
 {
     (void)state;
@@ -347,6 +422,14 @@ int main(void)
               cmocka_unit_test(test_sbMemoryOverlapLow_equal_base),
               cmocka_unit_test(test_sbMemoryOverlapLow_equal_full),
               cmocka_unit_test(test_sbMemoryOverlapLow_super_overlap),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_invalid_reference),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_invalid_reference_and_query),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_invalid_query),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_simple),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_equal),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_equal_base),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_equal_end),
+              cmocka_unit_test(test_sbMemoryOverlapHigh_super_overlap),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_origin),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_destination),
               cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),

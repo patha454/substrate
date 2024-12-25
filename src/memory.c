@@ -39,6 +39,17 @@ extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query)
     return false;
 }
 
+extern bool sbMemoryOverlapHigh(sb_memory_t reference, sb_memory_t query)
+{
+    if (!sbMemoryValid(reference) || !sbMemoryValid(query)) {
+        return false;
+    }
+    if (query.base < reference.base + reference.length && query.base + query.length >= reference.base + reference.length) {
+        return true;
+    }
+    return false;
+}
+
 extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
 {
     if (!sbMemoryValid(origin) || !sbMemoryValid(destination)) {
