@@ -1,12 +1,12 @@
 #include "memory.h"
 
-extern sb_memory_t sbMemory(const void* pointer, size_t length)
+extern sb_memory_t sbMemory(const void* pointer, const size_t length)
 {
     struct _SbMemory memory = { .base = (intptr_t)pointer, .length = length };
     return memory;
 }
 
-extern bool sbMemoryValid(sb_memory_t memory)
+extern bool sbMemoryValid(const sb_memory_t memory)
 {
     if ((void*)memory.base == nullptr) {
         return false;
@@ -17,7 +17,7 @@ extern bool sbMemoryValid(sb_memory_t memory)
     return true;
 }
 
-extern void* sbMemoryOffset(sb_memory_t memory, size_t offset)
+extern void* sbMemoryOffset(const sb_memory_t memory, const size_t offset)
 {
     if (!sbMemoryValid(memory)) {
         return nullptr;
@@ -51,7 +51,7 @@ extern bool sbMemoryOverlapHigh(
     return false;
 }
 
-extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
+extern bool sbMemoryCopy(const sb_memory_t origin, const sb_memory_t destination)
 {
     if (!sbMemoryValid(origin) || !sbMemoryValid(destination)) {
         return false;
