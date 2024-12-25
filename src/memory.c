@@ -33,6 +33,9 @@ extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query)
     if (!sbMemoryValid(reference) || !sbMemoryValid(query)) {
         return false;
     }
+    if (query.base <= reference.base && query.base + query.length > reference.base) {
+        return true;
+    }
     return false;
 }
 

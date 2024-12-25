@@ -122,6 +122,51 @@ static void test_sbMemoryOverlapLow_invalid_reference_and_query(void** state)
     assert_false(sbMemoryOverlapLow(reference, query));
 }
 
+static void test_sbMemoryOverlapLow_simple(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 4);
+    assert_true(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_equal(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 4);
+    assert_true(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_equal_base(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 2);
+    assert_true(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_equal_full(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes, 4);
+    const sb_memory_t query = sbMemory(&bytes, 8);
+    assert_true(sbMemoryOverlapLow(reference, query));
+}
+
+static void test_sbMemoryOverlapLow_super_overlap(void** state)
+{
+    (void)state;
+    const uint8_t bytes[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const sb_memory_t reference = sbMemory(&bytes[2], 2);
+    const sb_memory_t query = sbMemory(&bytes, 8);
+    assert_true(sbMemoryOverlapLow(reference, query));
+}
+
 static void test_sbMemoryCopy_zero_len_origin(void** state)
 {
     (void)state;
@@ -297,6 +342,11 @@ int main(void)
               cmocka_unit_test(test_sbMemoryOverlapLow_invalid_reference),
               cmocka_unit_test(test_sbMemoryOverlapLow_invalid_reference_and_query),
               cmocka_unit_test(test_sbMemoryOverlapLow_invalid_query),
+              cmocka_unit_test(test_sbMemoryOverlapLow_simple),
+              cmocka_unit_test(test_sbMemoryOverlapLow_equal),
+              cmocka_unit_test(test_sbMemoryOverlapLow_equal_base),
+              cmocka_unit_test(test_sbMemoryOverlapLow_equal_full),
+              cmocka_unit_test(test_sbMemoryOverlapLow_super_overlap),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_origin),
               cmocka_unit_test(test_sbMemoryCopy_zero_len_destination),
               cmocka_unit_test(test_sbMemoryCopy_no_overlap_single_byte),
