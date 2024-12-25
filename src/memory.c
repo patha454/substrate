@@ -28,12 +28,14 @@ extern void* sbMemoryOffset(const sb_memory_t memory, const size_t offset)
     return (void*)(memory.base + offset);
 }
 
-extern bool sbMemoryOverlapLow(const sb_memory_t reference, const sb_memory_t query)
+extern bool sbMemoryOverlapLow(
+    const sb_memory_t reference, const sb_memory_t query)
 {
     if (!sbMemoryValid(reference) || !sbMemoryValid(query)) {
         return false;
     }
-    if (query.base <= reference.base && query.base + query.length > reference.base) {
+    if (query.base <= reference.base
+        && query.base + query.length > reference.base) {
         return true;
     }
     return false;
@@ -45,13 +47,15 @@ extern bool sbMemoryOverlapHigh(
     if (!sbMemoryValid(reference) || !sbMemoryValid(query)) {
         return false;
     }
-    if (query.base < reference.base + reference.length && query.base + query.length >= reference.base + reference.length) {
+    if (query.base < reference.base + reference.length
+        && query.base + query.length >= reference.base + reference.length) {
         return true;
     }
     return false;
 }
 
-extern bool sbMemoryCopy(const sb_memory_t origin, const sb_memory_t destination)
+extern bool sbMemoryCopy(
+    const sb_memory_t origin, const sb_memory_t destination)
 {
     if (!sbMemoryValid(origin) || !sbMemoryValid(destination)) {
         return false;

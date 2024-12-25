@@ -93,7 +93,7 @@ void* sbMemoryOffset(sb_memory_t memory, size_t offset);
  * \return True if the query overlaps with the low end of the reference.
  */
 [[nodiscard("sbMemoryOverlapLow is a pure function")]]
- extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query);
+extern bool sbMemoryOverlapLow(sb_memory_t reference, sb_memory_t query);
 
 /**
  * Test if block of memory overlaps with the highest addresses of another.
@@ -109,7 +109,7 @@ void* sbMemoryOffset(sb_memory_t memory, size_t offset);
  * \return True if the query overlaps with the high end of the reference.
  */
 [[nodiscard("sbMemoryOverlapHigh is a pure function")]]
- extern bool sbMemoryOverlapHigh(sb_memory_t reference, sb_memory_t query);
+extern bool sbMemoryOverlapHigh(sb_memory_t reference, sb_memory_t query);
 
 /**
  * Copy memory from the origin to the destination.
