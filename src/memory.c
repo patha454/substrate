@@ -59,8 +59,7 @@ extern bool sbMemoryCopy(sb_memory_t origin, sb_memory_t destination)
     if (origin.length > destination.length) {
         return false;
     }
-    bool reverse = destination.base > origin.base
-        && destination.base < origin.base + origin.length;
+    const bool reverse = sbMemoryOverlapHigh(origin, destination);
     auto source
         = (intptr_t)(reverse ? origin.base + origin.length - 1 : origin.base);
     auto target = (intptr_t)(reverse ? destination.base + origin.length - 1
