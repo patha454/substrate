@@ -4,19 +4,15 @@
   "remoteUser": "substrate",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": false,
-      "configureZshAsDefaultShell": false,
-      "installOhMyZsh": false,
-      "installOhMyZshConfig": false,
-      "username": "substrate",
-      "upgradePackages": true
+      "installZsh": "false",
+      "configureZshAsDefaultShell": "false",
+      "installOhMyZsh": "false",
+      "installOhMyZshConfig": "false",
+      "upgradePackages": "true"
     }
   },
   "customizations": {
     "jetbrains": {
-      "settings": {
-        "com.intellij:app:HttpConfigurable.use_proxy_pac": true
-      },
       "backend": "CLion"
     }
   }
