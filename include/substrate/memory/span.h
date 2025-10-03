@@ -1,5 +1,8 @@
 /**
  * @brief Spans of memory and functions for copying and setting their contents.
+ *
+ * @author H Paterson
+ * @copyright Boost Software License - Version 1.0
  */
 
 #ifndef SUBSTRATE_SPAN_H

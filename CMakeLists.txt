@@ -4,4 +4,20 @@ project(substrate C)
 set(CMAKE_C_STANDARD 23)
 
 add_library(substrate STATIC
-        memory/span.h)
+        include/substrate/memory/span.h
+        src/memory/span.c)
+
+target_include_directories(substrate
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+# Optional: Installation rules
+install(TARGETS substrate
+        ARCHIVE DESTINATION lib)
+
+install(DIRECTORY include/substrate
+        DESTINATION include)
