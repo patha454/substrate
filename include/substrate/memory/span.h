@@ -9,7 +9,7 @@
 #define SUBSTRATE_SPAN_H
 
 
-#include <stdint.h>
+#include <stddef.h>
 
 
 struct _SbSpan {
