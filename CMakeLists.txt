@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 4.0)
 project(substrate C)
 
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
 add_library(substrate STATIC
         include/substrate/memory/span.h
