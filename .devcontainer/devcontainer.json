@@ -1,6 +1,7 @@
 {
   "name": "Substrate Development Container",
   "image": "mcr.microsoft.com/devcontainers/cpp",
+  "remoteUser": "substrate",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": "false",
