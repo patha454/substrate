@@ -17,9 +17,38 @@ target_include_directories(substrate
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-# Optional: Installation rules
 install(TARGETS substrate
         ARCHIVE DESTINATION lib)
 
 install(DIRECTORY include/substrate
         DESTINATION include)
+
+# --- Testing ---
+option(BUILD_TESTS "Built Substrate's tests" ON)
+
+if(BUILD_TESTS)
+    include(FetchContent)
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+        cmocka
+        GIT_REPOSITORY https://git.cryptomilk.org/projects/cmocka.git/
+        GIT_TAG cmocka-1.1.8
+        GIT_SHALLOW TRUE
+    )
+    # Disable Cmocka's extra targets and examples.
+    set(WITH_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(WITH_STATIC_LIB ON CACHE BOOL "" FORCE)
+    set(UNIT_TESTING OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(cmocka)
+    enable_testing()
+    add_executable(
+        substrate_tests
+            tests/test_dummy.c
+    )
+    target_link_libraries(substrate_tests
+        PRIVATE
+            substrate
+            cmocka
+    )
+    add_test(NAME substrate_tests COMMAND substrate_tests)
+endif()
