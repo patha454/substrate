@@ -1,4 +1,4 @@
-`# Substrate
+# Substrate
 
 Substrate will be a free-standing systems library, intended for use developing operating system kernels, dynamic 
 linkers, and embedded systems. It is also designed to be a supplementary utility library alongside a C Standard Library.
