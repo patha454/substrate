@@ -65,7 +65,7 @@ bool sbCopySpan(SbSpan origin, SbSpan destination);
 /**
  * Create a span which provides a view of an existing span.
  *
- * `sbSubSpan` creates a span which provides access to a subset of another
+ * `sbSliceSpan` creates a span which provides access to a subset of another
  * span. The subspan will be `len` bytes wide starting from `offset` in the
  * original span.
  *
@@ -80,6 +80,6 @@ bool sbCopySpan(SbSpan origin, SbSpan destination);
  * @return A span which provides access to a subset of the original span's
  * memory.
  */
-SbSpan sbSubSpan(SbSpan parent, size_t offset, size_t len);
+SbSpan sbSliceSpan(SbSpan parent, size_t offset, size_t len);
 
 #endif //SUBSTRATE_SPAN_H
