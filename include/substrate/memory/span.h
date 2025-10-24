@@ -46,7 +46,6 @@ typedef struct _SbSpan SbSpan;
  */
 SbSpan sbCreateSpan(void * ptr, size_t len);
 
-
 /**
  * Copy data from one memory location to another.
  *
@@ -81,5 +80,13 @@ bool sbCopySpan(SbSpan origin, SbSpan destination);
  * memory.
  */
 SbSpan sbSliceSpan(SbSpan parent, size_t offset, size_t len);
+
+/**
+ * Assign a specific value to every byte in a span.
+ *
+ * @param span Set all bytes in this memory range to a specific value.
+ * @param value Set all bytes in `span` to this value.
+ */
+void sbSetSpan(SbSpan span, uint8_t value);
 
 #endif //SUBSTRATE_SPAN_H
