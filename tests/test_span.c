@@ -8,7 +8,7 @@
 /* A span to a null pointer must be legal. */
 static void test_sbCreateSpan_null_zero(void ** state) {
     (void) state;
-    constexpr size_t len = 0;
+    const size_t len = 0;
     const SbSpan span = sbCreateSpan(nullptr, len);
     assert_ptr_equal((void *) nullptr, span.ptr);
     assert_int_equal(span.len, len);
@@ -17,7 +17,7 @@ static void test_sbCreateSpan_null_zero(void ** state) {
 /* A span to a null pointer must have its length set to zero. */
 static void test_sbCreateSpan_null_non_zero(void ** state) {
     (void) state;
-    constexpr size_t len = 1;
+    const size_t len = 1;
     SbSpan span = sbCreateSpan(nullptr, len);
     assert_ptr_equal((void *) nullptr, span.ptr);
     assert_int_equal(span.len, 0);
@@ -27,7 +27,7 @@ static void test_sbCreateSpan_null_non_zero(void ** state) {
 static void test_sbCreateSpan_non_null_zero(void ** state) {
     (void) state;
     void * ptr = (void *) 0x12345678;
-    constexpr size_t len = 0;
+    const size_t len = 0;
     SbSpan span = sbCreateSpan(ptr, len);
     assert_ptr_equal(ptr, span.ptr);
     assert_int_equal(span.len, len);
@@ -37,7 +37,7 @@ static void test_sbCreateSpan_non_null_zero(void ** state) {
 static void test_sbCreateSpan_non_null_non_zero(void ** state) {
     (void) state;
     void * ptr = (void *) 0x12345678;
-    constexpr size_t len = 1;
+    const size_t len = 1;
     const SbSpan span = sbCreateSpan(ptr, len);
     assert_ptr_equal(ptr, span.ptr);
     assert_int_equal(span.len, len);
