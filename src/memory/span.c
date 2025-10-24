@@ -11,3 +11,7 @@ extern SbSpan sbCreateSpan(void * ptr, size_t len) {
     };
     return span;
 }
+
+extern bool sbCopySpan(SbSpan origin, SbSpan destination) {
+    return false;
+}
