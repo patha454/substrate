@@ -52,19 +52,31 @@ SbSpan sbCreateSpan(void * ptr, size_t len);
  * span cannot be copied in full, no data will be copied and `sbSpanCopy()`
  * will return false.
  *
- * @param origin
- * @param destination
- * @return
+ * @param origin Copy the contents of this span.
+ * @param destination Write the contents of the `origin` span into this span.
+ * @return True if the span can be copied in full, otherwise no data will be
+ * copied and returns false.
  */
 bool sbCopySpan(SbSpan origin, SbSpan destination);
 
 /**
+ * Create a span which provides a view of an existing span.
  *
- * @param parent
- * @param len
- * @param offset
- * @return
+ * `sbSubSpan` creates a span which provides access to a subset of another
+ * span. The subspan will be `len` bytes wide starting from `offset` in the
+ * original span.
+ *
+ * If a subspan's offset and length would cause it to overrun the original
+ * span, the subspan length will be silently limited to the end of the original
+ * span.
+ *
+ * @param parent Create a subspan of this span.
+ * @param offset Start the subspan `offset` bytes into the original span.
+ * @param len Span `len` bytes from the `offset`, unless the subspan would
+ * overrun the end of the original.)
+ * @return A span which provides access to a subset of the original span's
+ * memory.
  */
-SbSpan SbSubSpan(SbSpan parent, size_t len, size_t offset);
+SbSpan sbSubSpan(SbSpan parent, size_t offset, size_t len);
 
 #endif //SUBSTRATE_SPAN_H
