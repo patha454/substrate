@@ -37,6 +37,9 @@ typedef struct _SbSpan SbSpan;
  * is responsible for ensuring the memory is accessible and remains accessible
  * for the duration it is used by Substrate.
  *
+ * @note A span pointing to null memory is legal but will have its length set
+ * to zero regardless of the `len` passed in.
+ *
  * @param ptr Beginning of the memory span.
  * @param len Length of the memory span, in bytes.
  * @return Span representing the memory location and length provided.

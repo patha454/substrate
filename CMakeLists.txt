@@ -43,7 +43,7 @@ if(BUILD_TESTS)
     enable_testing()
     add_executable(
         substrate_tests
-            tests/test_dummy.c
+            tests/test_span.c
     )
     target_link_libraries(substrate_tests
         PRIVATE
