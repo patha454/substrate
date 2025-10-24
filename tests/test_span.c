@@ -191,19 +191,40 @@ static void test_sbCopySpan_small_destination_superset_middle(void ** state) {
 }
 
 /*
- * A copy where the destination spans a subset of the origin must place the
- * original, truncated data in the new location.
+ * A copy where the destination spans a subset of the origin must be rejected
+ * without modifying the data - the destination is smaller than the origin.
  */
 static void test_sbCopySpan_small_destination_subset_middle(void ** state) {
     (void) state;
     uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
-    const uint8_t expected[] = {1, 2, 1, 2, 3, 4, 7, 8};
+    const uint8_t expected[] = {1, 2, 3, 4, 5, 6, 7, 8};
     const SbSpan originSpan = sbCreateSpan(buffer, sizeof(buffer));
     const SbSpan destinationSpan = sbCreateSpan(&buffer[2], 4);
-    assert_true(sbCopySpan(originSpan, destinationSpan));
+    assert_false(sbCopySpan(originSpan, destinationSpan));
     for (size_t i = 0; i < sizeof(expected); i++) {
         assert_int_equal(buffer[i], expected[i]);
     }
+}
+
+
+/*
+ * A copy to a smaller destination must be rejected without modifying the data.
+ *
+ */
+static void test_sbCopySpan_small_no_overlap_smaller_destination(
+    void ** state
+) {
+    (void) state;
+    uint8_t origin[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    uint8_t destination[] = {9, 10, 11, 12};
+    uint8_t expected[] = {9, 10, 11, 12};
+    const SbSpan originSpan = sbCreateSpan(origin, sizeof(origin));
+    const SbSpan destinationSpan = sbCreateSpan(destination, sizeof(destination));
+    assert_false(sbCopySpan(originSpan, destinationSpan));
+    for (size_t i = 0; i < sizeof(destination); i++) {
+        assert_int_equal(destination[i], expected[i]);
+    }
+
 }
 
 int main(void) {
@@ -223,7 +244,8 @@ int main(void) {
         cmocka_unit_test(test_sbCopySpan_small_upper_overlap),
         cmocka_unit_test(test_sbCopySpan_small_idempotent),
         cmocka_unit_test(test_sbCopySpan_small_destination_superset_middle),
-        cmocka_unit_test(test_sbCopySpan_small_destination_subset_middle)
+        cmocka_unit_test(test_sbCopySpan_small_destination_subset_middle),
+        cmocka_unit_test(test_sbCopySpan_small_no_overlap_smaller_destination)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
