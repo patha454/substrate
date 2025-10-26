@@ -38,3 +38,10 @@ extern bool sbCopySpan(SbSpan origin, SbSpan destination) {
     }
     return true;
 }
+
+extern SbSpan sbSliceSpan(SbSpan span, size_t offset, size_t length) {
+    if (offset + length > span.len) {
+        length = span.len - offset;
+    }
+    return sbCreateSpan((void *) (span.ptr + offset), length);
+}

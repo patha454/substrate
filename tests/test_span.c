@@ -224,7 +224,122 @@ static void test_sbCopySpan_small_no_overlap_smaller_destination(
     for (size_t i = 0; i < sizeof(destination); i++) {
         assert_int_equal(destination[i], expected[i]);
     }
+}
 
+/* A total slice of the original array must be a full view of the original. */
+static void test_sbSliceSpan_idempotent(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, 0, sizeof(buffer));
+    assert_int_equal(span.len, slice.len);
+    assert_ptr_equal(span.ptr, slice.ptr);
+    for (size_t i = 0; i < sizeof(buffer); i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/* A slice from the start of a span must be legal. */
+static void test_sbSliceSpan_start_partial(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceLength = sizeof(buffer) - 2;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, 0, sliceLength);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr, slice.ptr);
+    for (size_t i = 0; i < sliceLength; i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/*
+ * A slice from the start of a span which exceeds the original length must be
+ * legal but silently truncated to the original span length.
+ */
+static void test_sbSliceSpan_start_overflow(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t spanLength = sizeof(buffer) + 2;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, 0, spanLength);
+    assert_int_equal(slice.len, span.len);
+    assert_ptr_equal(span.ptr, slice.ptr);
+    for (size_t i = 0; i < slice.len; i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/* A slice in the middle of the span must be legal. */
+static void test_sbSliceSpan_middle(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceLength = 2;
+    const size_t sliceOffset = 3;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, sliceOffset, sliceLength);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr + sliceOffset, slice.ptr);
+    for (size_t i = 0; i < sliceLength; i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i + sliceOffset], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/* A slice in the middle of the span to the end must be legal. */
+static void test_sbSliceSpan_middle_end(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceOffset = 2;
+    const size_t sliceLength = sizeof(buffer) - sliceOffset;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, sliceOffset, sliceLength);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr + sliceOffset, slice.ptr);
+    for (size_t i = 0; i < sliceLength; i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i + sliceOffset], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/*
+ * A slice in the middle which overflows the original must be legal but
+ * silently truncated.
+ */
+static void test_sbSliceSpan_middle_overflow(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceOffset = 2;
+    const size_t sliceLength = sizeof(buffer) - sliceOffset;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, sliceOffset, sliceLength + 3);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr + sliceOffset, slice.ptr);
+    for (size_t i = 0; i < sliceLength; i++) {
+        assert_int_equal(((uint8_t *) span.ptr)[i + sliceOffset], ((uint8_t *) slice.ptr)[i]);
+    }
+}
+
+/* A zero-length slice from the end of a span must be legal. */
+static void test_sbSliceSpan_end_zero(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceOffset = sizeof(buffer);
+    const size_t sliceLength = 0;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, sliceOffset, sliceLength);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr + sliceOffset, slice.ptr);
+}
+
+/* A non-zero-length slice from the end of a span must be legal. */
+static void test_sbSliceSpan_end_overflow(void ** state) {
+    (void) state;
+    uint8_t buffer[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    const size_t sliceOffset = sizeof(buffer);
+    const size_t sliceLength = 0;
+    const SbSpan span = sbCreateSpan(buffer, sizeof(buffer));
+    const SbSpan slice = sbSliceSpan(span, sliceOffset, sliceLength + 1);
+    assert_int_equal(slice.len, sliceLength);
+    assert_ptr_equal(span.ptr + sliceOffset, slice.ptr);
 }
 
 int main(void) {
@@ -245,7 +360,15 @@ int main(void) {
         cmocka_unit_test(test_sbCopySpan_small_idempotent),
         cmocka_unit_test(test_sbCopySpan_small_destination_superset_middle),
         cmocka_unit_test(test_sbCopySpan_small_destination_subset_middle),
-        cmocka_unit_test(test_sbCopySpan_small_no_overlap_smaller_destination)
+        cmocka_unit_test(test_sbCopySpan_small_no_overlap_smaller_destination),
+        cmocka_unit_test(test_sbSliceSpan_idempotent),
+        cmocka_unit_test(test_sbSliceSpan_start_partial),
+        cmocka_unit_test(test_sbSliceSpan_start_overflow),
+        cmocka_unit_test(test_sbSliceSpan_middle),
+        cmocka_unit_test(test_sbSliceSpan_middle_end),
+        cmocka_unit_test(test_sbSliceSpan_middle_overflow),
+        cmocka_unit_test(test_sbSliceSpan_end_zero),
+        cmocka_unit_test(test_sbSliceSpan_end_overflow)
     };
     return cmocka_run_group_tests(tests, nullptr, nullptr);
 }
